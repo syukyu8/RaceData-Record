@@ -3,7 +3,7 @@ Vue.component('inputdata', {
         <form class="inputdata-form" @submit.prevent="onSubmit">
 
         <p v-if="errors.length">
-            <b>Please correct the following error(s):</b>
+            <b>以下の項目を修正してください:</b>
             <ul>
                 <li v-for="error in errors">{{ error }}</li>
             </ul>
@@ -16,37 +16,54 @@ Vue.component('inputdata', {
 
         <p>
             <label for="speed">スピード</label>
-            <textarea id="speed" v-model="speed"></textarea>
+            <select id="speed" v-model.number="speed">
+                <option v-for="Speed in list" :key="Speed" :value="Speed">{{ Speed }}</option>
+            </select>
         </p>
 
         <p>
             <label for="stamina">スタミナ</label>
-            <textarea id="stamina" v-model="stamina"></textarea>
+            <select id="stamina" v-model.number="stamina">
+                <option v-for="Stamina in list" :key="Stamina" :value="Stamina">{{ Stamina }}</option>
+            </select>
         </p>
 
         <p>
             <label for="power">パワー</label>
-            <textarea id="power" v-model="power"></textarea>
+            <select id="power" v-model.number="power">
+                <option v-for="Power in list" :key="Power" :value="Power">{{ Power }}</option>
+            </select>
         </p>
 
         <p>
             <label for="guts">根性</label>
-            <textarea id="guts" v-model="guts"></textarea>
+            <select id="guts" v-model.number="guts">
+                <option v-for="Guts in list" :key="Guts" :value="Guts">{{ Guts }}</option>
+            </select>
         </p>
 
         <p>
             <label for="wise">賢さ</label>
-            <textarea id="wise" v-model="wise"></textarea>
+            <select id="wise" v-model.number="wise">
+                <option v-for="Wise in list" :key="Wise" :value="Wise">{{ Wise }}</option>
+            </select>
         </p>
 
         <p>
             <label for="ranking">順位:</label>
             <select id="ranking" v-model.number="ranking">
-                <option>5</option>
-                <option>4</option>
-                <option>3</option>
-                <option>2</option>
                 <option>1</option>
+                <option>2</option>
+                <option>3</option>
+                <option>4</option>
+                <option>5</option>
+                <option>6</option>
+                <option>7</option>
+                <option>8</option>
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
             </select>
         <p>
             <input type="submit" value="Submit">
@@ -58,16 +75,17 @@ Vue.component('inputdata', {
         return {
             errors: [],
             name: null,
-            speed: null,
-            stamina: null,
-            power: null,
-            guts: null,
-            wise: null,
-            ranking: null
+            speed: 800,
+            stamina: 800,
+            power: 800,
+            guts: 800,
+            wise: 800,
+            ranking: null,
+            list: [],
         }
     },
     methods:{
-        onsubmit() {
+        onSubmit() {
             if (this.name && this.speed && stamina && power && guts && wise && ranking) {
                 this.name = null
                 this.speed = null
@@ -78,7 +96,7 @@ Vue.component('inputdata', {
                 this.ranking = null
             }
             else{
-                if (!this.name) this.errors.push('name required.')
+                if (!this.name) this.errors.push('名前を入力してください.')
                 if (!this.speed) this.errors.push('speed required.')
                 if (!this.stamina) this.errors.push('stamina required.')
                 if (!this.power) this.errors.push('power required.')
@@ -86,6 +104,13 @@ Vue.component('inputdata', {
                 if (!this.wise) this.errors.push('wise required.')
                 if (!this.ranking) this.errors.push('ranking required.')
             }
+        }
+    },
+    created() {
+        const stats = 1
+
+        for(let i = 0; i < 1200; i++){
+            this.list.push(stats + i)
         }
     }
 })
