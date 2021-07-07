@@ -11,7 +11,9 @@ Vue.component('inputdata', {
 
         <p>
             <label for="name">ウマ娘</label>
-            <input id="name" v-model="name">
+            <select id="name" v-model="name">
+                <option v-for="Name in namelist" :key="Name" :value="Name">{{ Name }}</option>
+            </select>
         </p>
 
         <p>
@@ -73,27 +75,42 @@ Vue.component('inputdata', {
     `,
     data() {
         return {
+            race: 'チームレース履歴登録',
             errors: [],
-            name: null,
+            name: 'オグリキャップ',
             speed: 800,
             stamina: 800,
             power: 800,
             guts: 800,
             wise: 800,
-            ranking: null,
+            ranking: 1,
             list: [],
+            namelist: [
+                'オグリキャップ','カレンチャン','サイレンススズカ',
+                'シンボリルドルフ','スペシャルウィーク','スマートファルコン',
+                'セイウンスカイ','タイキシャトル','テイエムオペラオー',
+                'トウカイテイオー','ナリタタイシン','ナリタブライアン',
+                'ヒシアマゾン','ビワハヤヒデ','マルゼンスキー',
+                'ミホノブルボン','メジロマックイーン','ライスシャワー',
+                'ウォッカ','エアグルーヴ','エルコンドルパサー',
+                'グラスワンダー','ゴールドシップ','スーパークリーク',
+                'ダイワスカーレット','マヤノトップガン','アグネスタキオン',
+                'ウイニングチケット','キングヘイロー','サクラバクシンオー',
+                'ナイスネイチャ','ハルウララ','マチカネフクキタル',
+                'メジロライアン'
+            ]
         }
     },
     methods:{
         onSubmit() {
             if (this.name && this.speed && stamina && power && guts && wise && ranking) {
-                this.name = null
-                this.speed = null
-                this.stamina = null
-                this.power = null
-                this.guts = null
-                this.wise = null
-                this.ranking = null
+                this.name = 'オグリキャップ'
+                this.speed = 800
+                this.stamina = 800
+                this.power = 800
+                this.guts = 800
+                this.wise = 800
+                this.ranking = 1
             }
             else{
                 if (!this.name) this.errors.push('名前を入力してください.')
@@ -132,3 +149,31 @@ var app = new Vue({
         ]
     }
 })
+
+const Foo = { 
+    template: `
+        <div>
+            <h1>チームレース履歴</h1>
+        </div>
+    ` 
+}
+const Bar = { 
+    template: `
+        <div>
+            <h1>チームレース履歴削除</h1>
+        </div>
+    `
+}
+
+const routes = [
+    { path: '/foo', component: Foo },
+    { path: '/bar', component: Bar }
+  ]
+
+  const router = new VueRouter({
+    routes // `routes: routes` の短縮表記
+  })
+
+  const route = new Vue({
+      router
+  }).$mount('#route')
