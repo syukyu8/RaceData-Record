@@ -1,5 +1,7 @@
 Vue.component('inputdata', {
     template:`
+        <div>
+        <h2>{{ race }}</h2>
         <form class="inputdata-form" @submit.prevent="onSubmit">
 
         <p v-if="errors.length">
@@ -72,6 +74,7 @@ Vue.component('inputdata', {
         </p>
 
         </form>
+        </div>
     `,
     data() {
         return {
@@ -132,6 +135,12 @@ Vue.component('inputdata', {
     }
 })
 
+Vue.component('test',{
+    template:`
+        <h1>test</h1>
+    `
+})
+
 var app = new Vue({
     el: '#app',
     data: {
@@ -153,19 +162,26 @@ var app = new Vue({
 const Foo = { 
     template: `
         <div>
-            <h1>チームレース履歴</h1>
+            <h2>チームレース履歴</h2>
+            <test></test>
         </div>
     ` 
 }
 const Bar = { 
     template: `
         <div>
-            <h1>チームレース履歴削除</h1>
+            <h2>チームレース履歴削除</h2>
         </div>
     `
 }
 
+const Savedata = {
+    template:`
+        <inputdata></inputdata>
+    `
+}
 const routes = [
+    { path: '/', component: Savedata },
     { path: '/foo', component: Foo },
     { path: '/bar', component: Bar }
   ]
