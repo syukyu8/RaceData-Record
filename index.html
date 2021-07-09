@@ -6,28 +6,23 @@
     <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-    <div class="nav-bar"></div>
-    <div id="app">
-        <!-- <h1>{{ race }}</h1> -->
-        <div v-for="umamusume in uma"></div>
-    </div>
-
     <div id="route">
-        <h1>確認したいデータを選んでください</h1>
-        <p>
+        <div class="nav-bar">
             <!-- ナビゲーションに router-link コンポーネントを使う -->
             <!-- リンク先を `to` プロパティに指定します -->
             <!-- デフォルトで `<router-link>` は `<a>` タグとして描画されます -->
             <router-link to="/">チームレース履歴登録</router-link>
             <router-link to="/foo">チームレース履歴</router-link>
             <router-link to="/bar">チームレース履歴削除</router-link>
-        </p>
+        </div>
+        <!-- <h1>確認したいデータを選んでください</h1> -->
         <!-- ルートアウトレット -->
         <!-- ルートとマッチしたコンポーネントがここへ描画されます -->
         <router-view></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

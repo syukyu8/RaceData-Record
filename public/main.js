@@ -124,6 +124,20 @@ Vue.component('inputdata', {
                 if (!this.wise) this.errors.push('wise required.')
                 if (!this.ranking) this.errors.push('ranking required.')
             }
+        },
+        postMethod(){
+            let params = new FormData()
+            params.append('value', this.name)
+            params.append('value', this.speed)
+            params.append('value', this.stamina)
+            params.append('value', this.power)
+            params.append('value', this.guts)
+            params.append('value', this.wise)
+            params.append('value', this.ranking)
+
+            firebase.database().ref('board').push({
+                params
+            })
         }
     },
     created() {
@@ -141,23 +155,23 @@ Vue.component('test',{
     `
 })
 
-var app = new Vue({
-    el: '#app',
-    data: {
-        race: 'チームレース履歴登録',
-        uma:[
-            {
-                name: 'ウマ娘',
-                speed: 'スピード',
-                stamina: 'スタミナ',
-                power: 'パワー',
-                guts: '根性',
-                wise: '賢さ',
-                ranking: '順位'
-            }
-        ]
-    }
-})
+// var app = new Vue({
+//     el: '#app',
+//     data: {
+//         race: 'チームレース履歴登録',
+//         uma:[
+//             {
+//                 name: 'オグリキャップ',
+//                 speed: 800,
+//                 stamina: 800,
+//                 power: 800,
+//                 guts: 800,
+//                 wise: 800,
+//                 ranking: 1
+//             }
+//         ]
+//     }
+// })
 
 const Foo = { 
     template: `
@@ -177,7 +191,9 @@ const Bar = {
 
 const Savedata = {
     template:`
+        <div id="app">
         <inputdata></inputdata>
+        </div>
     `
 }
 const routes = [
