@@ -1,3 +1,7 @@
+Vue.config.devtools = true
+const database = firebase.database()
+const racedata = "team_race"
+
 Vue.component('inputdata', {
     template:`
         <div>
@@ -70,7 +74,7 @@ Vue.component('inputdata', {
                 <option>12</option>
             </select>
         <p>
-            <input type="submit" value="Submit">
+            <input type="submit" value="登録する">
         </p>
 
         </form>
@@ -107,6 +111,23 @@ Vue.component('inputdata', {
     methods:{
         onSubmit() {
             if (this.name && this.speed && stamina && power && guts && wise && ranking) {
+                // params.append('value', this.name)
+                // params.append('value', this.speed)
+                // params.append('value', this.stamina)
+                // params.append('value', this.power)
+                // params.append('value', this.guts)
+                // params.append('value', this.wise)
+                // params.append('value', this.ranking)
+
+                database.ref(racedata).push({
+                    Name: this.name,
+                    Speed: this.speed,
+                    Stamina: this.stamina,
+                    Power: this.power,
+                    Guts: this.guts,
+                    Wise: this.wise,
+                    Ranking: this.ranking
+                })
                 this.name = 'オグリキャップ'
                 this.speed = 800
                 this.stamina = 800
@@ -124,20 +145,6 @@ Vue.component('inputdata', {
                 if (!this.wise) this.errors.push('wise required.')
                 if (!this.ranking) this.errors.push('ranking required.')
             }
-        },
-        postMethod(){
-            let params = new FormData()
-            params.append('value', this.name)
-            params.append('value', this.speed)
-            params.append('value', this.stamina)
-            params.append('value', this.power)
-            params.append('value', this.guts)
-            params.append('value', this.wise)
-            params.append('value', this.ranking)
-
-            firebase.database().ref('board').push({
-                params
-            })
         }
     },
     created() {
@@ -149,10 +156,55 @@ Vue.component('inputdata', {
     }
 })
 
-Vue.component('test',{
+Vue.component('viewdata',{
     template:`
-        <h1>test</h1>
-    `
+        <div>
+        <h2>チームレース履歴</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ウマ娘</th>
+                    <th>順位</th>
+                    <th>スピード</th>
+                    <th>スタミナ</th>
+                    <th>パワー</th>
+                    <th>根性</th>
+                    <th>賢さ</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="record in racerecord">
+                    <td>{{ record.Name }}</td>
+                    <td>{{ record.Ranking }}</td>
+                    <td>{{ record.Speed }}</td>
+                    <td>{{ record.Stamina }}</td>
+                    <td>{{ record.Power }}</td>
+                    <td>{{ record.Guts }}</td>
+                    <td>{{ record.Wise }}</td>
+                </tr>
+            </tbody>
+        </table>
+        </div>
+    `,
+    data(){
+        return {
+            racerecord: []
+        }
+    },
+    methods:{
+        getMethod() {
+            database.ref(racedata).on("child_added",(snapshot) => {
+                
+                const datalist = snapshot.val()
+                const key = snapshot.key
+                console.log(datalist)
+                this.racerecord.push(datalist)
+            })
+        }
+    },
+    created() {
+        this.getMethod()
+    }
 })
 
 // var app = new Vue({
@@ -173,11 +225,10 @@ Vue.component('test',{
 //     }
 // })
 
-const Foo = { 
+const View = { 
     template: `
         <div>
-            <h2>チームレース履歴</h2>
-            <test></test>
+            <viewdata></viewdata>
         </div>
     ` 
 }
@@ -198,7 +249,7 @@ const Savedata = {
 }
 const routes = [
     { path: '/', component: Savedata },
-    { path: '/foo', component: Foo },
+    { path: '/viewdata', component: View },
     { path: '/bar', component: Bar }
   ]
 
