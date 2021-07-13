@@ -173,14 +173,34 @@ Vue.component('viewdata',{
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="record in racerecord">
-                    <td>{{ record.Name }}</td>
-                    <td>{{ record.Ranking }}</td>
-                    <td>{{ record.Speed }}</td>
-                    <td>{{ record.Stamina }}</td>
-                    <td>{{ record.Power }}</td>
-                    <td>{{ record.Guts }}</td>
-                    <td>{{ record.Wise }}</td>
+                <tr v-for="(record, index) in racerecord" :key="index">
+                    <td>
+                        {{ record.Name }}
+                    </td>
+                    <td>
+                        {{ record.Ranking }}
+                    </td>
+                    <td>
+                        {{ record.Speed }}
+                    </td>
+                    <td>
+                        {{ record.Stamina }}
+                    </td>
+                    <td>
+                        {{ record.Power }}
+                    </td>
+                    <td>
+                        {{ record.Guts }}
+                    </td>
+                    <td>
+                        {{ record.Wise }}
+                    </td>
+                    
+                    <td>
+                        <button class="delete" @click="deleteMethod(index)">
+                            データ削除
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -188,18 +208,45 @@ Vue.component('viewdata',{
     `,
     data(){
         return {
-            racerecord: []
+            racerecord: [],
+            namelist: [
+                'オグリキャップ','カレンチャン','サイレンススズカ',
+                'シンボリルドルフ','スペシャルウィーク','スマートファルコン',
+                'セイウンスカイ','タイキシャトル','テイエムオペラオー',
+                'トウカイテイオー','ナリタタイシン','ナリタブライアン',
+                'ヒシアマゾン','ビワハヤヒデ','マルゼンスキー',
+                'ミホノブルボン','メジロマックイーン','ライスシャワー',
+                'ウォッカ','エアグルーヴ','エルコンドルパサー',
+                'グラスワンダー','ゴールドシップ','スーパークリーク',
+                'ダイワスカーレット','マヤノトップガン','アグネスタキオン',
+                'ウイニングチケット','キングヘイロー','サクラバクシンオー',
+                'ナイスネイチャ','ハルウララ','マチカネフクキタル',
+                'メジロライアン'
+            ]
         }
     },
     methods:{
         getMethod() {
-            database.ref(racedata).on("child_added",(snapshot) => {
-                
+            database.ref(racedata).on("value",(snapshot) => {
                 const datalist = snapshot.val()
-                const key = snapshot.key
-                console.log(datalist)
-                this.racerecord.push(datalist)
+                this.racerecord = datalist
+
             })
+        },
+        deleteMethod(key) {
+            database.ref(racedata).child(key).remove()
+        },
+        updateMethod(index, Name, Speed, Stamina, Power, Guts, Wise, Ranking){
+            updatedata={
+                Name:Name,
+                Speed:Speed,
+                Stamina:Stamina,
+                Power:Power,
+                Guts:Guts,
+                Wise:Wise,
+                Ranking:Ranking
+            }
+            database.ref(racedata).child(index).update(updatedata)
         }
     },
     created() {
@@ -232,13 +279,6 @@ const View = {
         </div>
     ` 
 }
-const Bar = { 
-    template: `
-        <div>
-            <h2>チームレース履歴削除</h2>
-        </div>
-    `
-}
 
 const Savedata = {
     template:`
@@ -249,8 +289,7 @@ const Savedata = {
 }
 const routes = [
     { path: '/', component: Savedata },
-    { path: '/viewdata', component: View },
-    { path: '/bar', component: Bar }
+    { path: '/viewdata', component: View }
   ]
 
   const router = new VueRouter({
