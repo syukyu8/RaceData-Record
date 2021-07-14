@@ -1,4 +1,5 @@
 Vue.config.devtools = true
+Vue.use(window["vue-js-modal"].default)
 const database = firebase.database()
 const racedata = "team_race"
 
@@ -6,6 +7,7 @@ Vue.component('inputdata', {
     template:`
         <div>
         <h2>{{ race }}</h2>
+        <p>このページではチームレースの結果を入力して保存することができます</p>
         <form class="inputdata-form" @submit.prevent="onSubmit">
 
         <p v-if="errors.length">
@@ -16,42 +18,42 @@ Vue.component('inputdata', {
         </p>
 
         <p>
-            <label for="name">ウマ娘</label>
+            <label for="name">ウマ娘:</label>
             <select id="name" v-model="name">
                 <option v-for="Name in namelist" :key="Name" :value="Name">{{ Name }}</option>
             </select>
         </p>
 
         <p>
-            <label for="speed">スピード</label>
+            <label for="speed">スピード:</label>
             <select id="speed" v-model.number="speed">
                 <option v-for="Speed in list" :key="Speed" :value="Speed">{{ Speed }}</option>
             </select>
         </p>
 
         <p>
-            <label for="stamina">スタミナ</label>
+            <label for="stamina">スタミナ:</label>
             <select id="stamina" v-model.number="stamina">
                 <option v-for="Stamina in list" :key="Stamina" :value="Stamina">{{ Stamina }}</option>
             </select>
         </p>
 
         <p>
-            <label for="power">パワー</label>
+            <label for="power">パワー:</label>
             <select id="power" v-model.number="power">
                 <option v-for="Power in list" :key="Power" :value="Power">{{ Power }}</option>
             </select>
         </p>
 
         <p>
-            <label for="guts">根性</label>
+            <label for="guts">根性:</label>
             <select id="guts" v-model.number="guts">
                 <option v-for="Guts in list" :key="Guts" :value="Guts">{{ Guts }}</option>
             </select>
         </p>
 
         <p>
-            <label for="wise">賢さ</label>
+            <label for="wise">賢さ:</label>
             <select id="wise" v-model.number="wise">
                 <option v-for="Wise in list" :key="Wise" :value="Wise">{{ Wise }}</option>
             </select>
@@ -160,16 +162,100 @@ Vue.component('viewdata',{
     template:`
         <div>
         <h2>チームレース履歴</h2>
+        <p>このページではチームレース履歴の確認・編集・削除ができます</p>
+        <modal name="detail" :draggable="true" :resizable="true" :width="600" :height="530">
+            <div class="modal-body">
+                <p>
+                <label>
+                    ウマ娘:
+                </label>
+                <select id="updateName" v-model="form.Name">
+                    <option v-for="Name in namelist" :key="Name" :value="Name">{{ Name }}</option>
+                </select>
+                </p>
+
+                <p>
+                <label>
+                    スピード:
+                </label>
+                <select id="speed" v-model.number="form.Speed">
+                    <option v-for="Speed in list" :key="Speed" :value="Speed">{{ Speed }}</option>
+                </select>
+                </p>
+
+                <p>
+                <label>
+                    スタミナ:
+                </label>
+                <select id="stamina" v-model.number="form.Stamina">
+                    <option v-for="Stamina in list" :key="Stamina" :value="Stamina">{{ Stamina }}</option>
+                </select>
+                </p>
+
+                <p>
+                <label>
+                    パワー:
+                </label>
+                <select id="power" v-model.number="form.Power">
+                    <option v-for="Power in list" :key="Power" :value="Power">{{ Power }}</option>
+                </select>
+                </p>
+            
+                <p>
+                <label>
+                    根性:
+                </label>
+                <select id="guts" v-model.number="form.Guts">
+                    <option v-for="Guts in list" :key="Guts" :value="Guts">{{ Guts }}</option>
+                </select>
+                </p>
+            
+                <p>
+                <label>
+                    賢さ:
+                </label>
+                <select id="wise" v-model.number="form.Wise">
+                    <option v-for="Wise in list" :key="Wise" :value="Wise">{{ Wise }}</option>
+                </select>
+                </p>
+
+                <p>
+                <label>
+                    順位:
+                </label>
+                <select id ="updateRanking" v-model.number="form.Ranking">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                    <option>7</option>
+                    <option>8</option>
+                    <option>9</option>
+                    <option>10</option>
+                    <option>11</option>
+                    <option>12</option>
+                </select>
+                </p>
+            
+            <button class="update-modal" @click="updateMethod(form.Name,form.Speed,form.Stamina,form.Power,form.Guts,form.Wise,form.Ranking)">
+                編集を保存する
+            </button>
+            </div>
+        </modal>
         <table class="table">
             <thead>
                 <tr>
-                    <th>ウマ娘</th>
+                    <td>ウマ娘</td>
                     <th>順位</th>
-                    <th>スピード</th>
-                    <th>スタミナ</th>
-                    <th>パワー</th>
-                    <th>根性</th>
-                    <th>賢さ</th>
+                    <td>スピード</td>
+                    <td>スタミナ</td>
+                    <td>パワー</td>
+                    <td>根性</td>
+                    <td>賢さ</td>
+                    <td>データ編集</td>
+                    <td>データ削除</td>
                 </tr>
             </thead>
             <tbody>
@@ -177,9 +263,9 @@ Vue.component('viewdata',{
                     <td>
                         {{ record.Name }}
                     </td>
-                    <td>
+                    <th>
                         {{ record.Ranking }}
-                    </td>
+                    </th>
                     <td>
                         {{ record.Speed }}
                     </td>
@@ -195,7 +281,11 @@ Vue.component('viewdata',{
                     <td>
                         {{ record.Wise }}
                     </td>
-                    
+                    <td>
+                        <button class="update" @click="onEdit(index)">
+                            データ編集
+                        </button>
+                    </td>
                     <td>
                         <button class="delete" @click="deleteMethod(index)">
                             データ削除
@@ -209,6 +299,8 @@ Vue.component('viewdata',{
     data(){
         return {
             racerecord: [],
+            form: {},
+            list: [],
             namelist: [
                 'オグリキャップ','カレンチャン','サイレンススズカ',
                 'シンボリルドルフ','スペシャルウィーク','スマートファルコン',
@@ -236,7 +328,12 @@ Vue.component('viewdata',{
         deleteMethod(key) {
             database.ref(racedata).child(key).remove()
         },
-        updateMethod(index, Name, Speed, Stamina, Power, Guts, Wise, Ranking){
+        onEdit(index) {
+            this.$modal.show('detail')
+            this.currentTargetIndex = index
+            this.form = Object.assign({}, this.racerecord[index])
+        },
+        updateMethod(Name, Speed, Stamina, Power, Guts, Wise, Ranking){
             updatedata={
                 Name:Name,
                 Speed:Speed,
@@ -246,31 +343,21 @@ Vue.component('viewdata',{
                 Wise:Wise,
                 Ranking:Ranking
             }
-            database.ref(racedata).child(index).update(updatedata)
+
+            database.ref(racedata).child(this.currentTargetIndex).update(updatedata)
+            this.$modal.hide('detail')
         }
     },
     created() {
         this.getMethod()
+        const stats = 1
+
+        for(let i = 0; i < 1200; i++){
+            this.list.push(stats + i)
+        }
     }
 })
 
-// var app = new Vue({
-//     el: '#app',
-//     data: {
-//         race: 'チームレース履歴登録',
-//         uma:[
-//             {
-//                 name: 'オグリキャップ',
-//                 speed: 800,
-//                 stamina: 800,
-//                 power: 800,
-//                 guts: 800,
-//                 wise: 800,
-//                 ranking: 1
-//             }
-//         ]
-//     }
-// })
 
 const View = { 
     template: `

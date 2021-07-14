@@ -4,6 +4,48 @@ body {
     margin: 0px;
   }
   
+  table {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+  }
+  
+  th,
+  td {
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  thead tr {
+    color: #fff;
+    background-color: #000;
+  }
+  
+  tbody tr:nth-of-type(odd) {
+    background-color: #efefef;
+  }
+
+  .update{
+    margin: 10px;
+    height: 60px;
+    width: 100px;
+    background-color: white;
+    color: blue;
+    border: solid 1px blue;
+    border-radius: 2px;
+  }
+
+  .delete{
+    margin: 10px;
+    height: 60px;
+    width: 100px;
+    background-color: white;
+    color: blue;
+    border: solid 1px blue;
+    border-radius: 2px;
+  }
+
   .nav-bar {
     background: linear-gradient(-90deg, #84CF6A, #16C0B0);
     height: 60px;

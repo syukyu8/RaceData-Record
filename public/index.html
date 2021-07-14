@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>ウマ娘レース履歴</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vue-js-modal@1.3.31/dist/styles.css">
 
     <!-- update the version number as needed -->
     <script defer src="/__/firebase/8.7.1/firebase-app.js"></script>
@@ -73,7 +74,7 @@
           <!-- リンク先を `to` プロパティに指定します -->
           <!-- デフォルトで `<router-link>` は `<a>` タグとして描画されます -->
           <router-link to="/">チームレース履歴登録</router-link>
-          <router-link to="/viewdata">チームレース履歴</router-link>
+          <router-link to="/viewdata">チームレース履歴確認</router-link>
       </div>
       <!-- <h1>確認したいデータを選んでください</h1> -->
       <!-- ルートアウトレット -->
@@ -82,6 +83,7 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-js-modal@1.3.28/dist/index.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="main.js"></script>
   </body>
