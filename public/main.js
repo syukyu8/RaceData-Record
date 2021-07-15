@@ -121,7 +121,7 @@ Vue.component('inputdata', {
                 // params.append('value', this.wise)
                 // params.append('value', this.ranking)
 
-                database.ref(racedata).push({
+                database.ref(racedata).child('user').push({
                     Name: this.name,
                     Speed: this.speed,
                     Stamina: this.stamina,
@@ -358,6 +358,118 @@ Vue.component('viewdata',{
     }
 })
 
+Vue.component('login',{
+    template: `
+        <div class="container mt-5">
+            <button class="btn btn-primary mb-3" @click="logoutUser" v-if="authenticatedUser">ログアウト</button>
+            <div class="row" v-else>
+                <div class="col-sm-6">
+                    <h2>新規ユーザ登録</h2>
+                    <form @submit.prevent="registerUser">
+                        <div class="form-group">
+                            <label for="email">メールアドレス:</label>
+                            <input type="email" class="form-control" id="email" v-model="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">パスワード:</label>
+                            <input type="password" class="form-control" id="password" v-model="password">
+                        </div>
+                        <button type="submit" class="btn btn-info">登録する</button>
+                    </form>
+                </div>
+
+                <div class="col-sm-6">
+                    <h2>ログイン</h2>
+                    <form @submit.prevent="loginUser">
+                        <div class="form-group">
+                            <label for="loginEmail">メールアドレス:</label>
+                            <input type="loginEmail" class="form-control" id="loginEmail" v-model="loginEmail">
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">パスワード:</label>
+                            <input type="loginPassword" class="form-control" id="loginPassword" v-model="loginPassword"> 
+                        </div>
+                        <button type="submit" class="btn btn-info">ログイン</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    `,
+    data(){
+        return {
+            email: '',
+            password: '',
+            loginEmail: '',
+            loginPassword: '',
+            authenticatedUser: ''
+        }
+    },
+    methods:{
+        registerUser(){
+            firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
+            .then(
+                (userCredential) => {
+                    console.log(userCredential)
+                    this.createNewUser()
+                    this.$router.replace('/')
+                },
+                (err) => {
+                    let errorCode = err.code
+                    let errorMessage = err.message
+                    alert(errorCode, errorMessage)
+                }
+            )
+            .catch(
+                function(error){
+                    var errorCode = error.code
+                    var errorMessage = error.message
+                    console.log(errorCode)
+                    console.log(errorMessage)
+                }
+            )
+        },
+        logoutUser(){
+            firebase.auth().signOut()
+          },
+        loginUser(){
+            firebase.auth().signInWithEmailAndPassword(this.loginEmail,this.loginPassword)
+            .then(()=>{
+                this.loginEmail = ''
+                this.loginPassword = ''
+            })
+            .catch(
+                function(error){
+                    var errorCode = error.code
+                    var errorMessage = error.message
+                    console.log(errorCode)
+                    console.log(errorMessage)
+                }
+            )
+        },
+        createNewUser(){
+            const user = firebase.auth().currentUser
+            if(user!=null){
+                const uid = user.uid
+                const email = user.email
+                console.log(uid)
+                console.log(email)
+                database.ref(racedata).child('user/id').set(uid)
+            }
+        }
+    },
+    mounted(){
+        firebase.auth().onAuthStateChanged((user) => {
+                if(user) {
+                    console.log("login")
+                    this.authenticatedUser = true
+                } else {
+                    console.log("logout")
+                    this.authenticatedUser = false
+                }
+            }
+        )
+    }
+})
 
 const View = { 
     template: `
@@ -374,9 +486,19 @@ const Savedata = {
         </div>
     `
 }
+
+const login = {
+    template: `
+        <div>
+            <login></login>
+        </div>
+    `
+}
+
 const routes = [
     { path: '/', component: Savedata },
-    { path: '/viewdata', component: View }
+    { path: '/viewdata', component: View },
+    { path: '/login', component: login}
   ]
 
   const router = new VueRouter({
