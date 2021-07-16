@@ -113,23 +113,23 @@ Vue.component('inputdata', {
     methods:{
         onSubmit() {
             if (this.name && this.speed && stamina && power && guts && wise && ranking) {
-                // params.append('value', this.name)
-                // params.append('value', this.speed)
-                // params.append('value', this.stamina)
-                // params.append('value', this.power)
-                // params.append('value', this.guts)
-                // params.append('value', this.wise)
-                // params.append('value', this.ranking)
-
-                database.ref(racedata).child('user').push({
-                    Name: this.name,
-                    Speed: this.speed,
-                    Stamina: this.stamina,
-                    Power: this.power,
-                    Guts: this.guts,
-                    Wise: this.wise,
-                    Ranking: this.ranking
-                })
+                const user = firebase.auth().currentUser
+                if(user!=null){
+                    const uid = user.uid
+                
+                    database.ref(racedata).child('user/' + uid).push({
+                        id: uid,
+                        Name: this.name,
+                        Speed: this.speed,
+                        Stamina: this.stamina,
+                        Power: this.power,
+                        Guts: this.guts,
+                        Wise: this.wise,
+                        Ranking: this.ranking
+                    })
+                }else{
+                    alert("ログインしてください")
+                }
                 this.name = 'オグリキャップ'
                 this.speed = 800
                 this.stamina = 800
@@ -155,6 +155,18 @@ Vue.component('inputdata', {
         for(let i = 0; i < 1200; i++){
             this.list.push(stats + i)
         }
+    },
+    mounted(){
+        firebase.auth().onAuthStateChanged((user) => {
+                if(user) {
+                    console.log("login")
+                    this.authenticatedUser = true
+                } else {
+                    console.log("logout")
+                    this.authenticatedUser = false
+                }
+            }
+        )
     }
 })
 
@@ -318,15 +330,23 @@ Vue.component('viewdata',{
         }
     },
     methods:{
-        getMethod() {
-            database.ref(racedata).on("value",(snapshot) => {
-                const datalist = snapshot.val()
-                this.racerecord = datalist
-
-            })
+        getMethod(user) {
+            console.log(user)
+            if(user!=null){
+                const uid = user.uid
+                database.ref(racedata).on("value",(snapshot) => {
+                    const datalist = snapshot.child('user/' +uid).val()
+                    this.racerecord = datalist
+    
+                })
+            }
         },
         deleteMethod(key) {
-            database.ref(racedata).child(key).remove()
+            const user = firebase.auth().currentUser
+            if(user!=null){
+                const uid = user.uid
+                database.ref(racedata).child('user/' + uid + '/' + key).remove()
+            }
         },
         onEdit(index) {
             this.$modal.show('detail')
@@ -343,18 +363,33 @@ Vue.component('viewdata',{
                 Wise:Wise,
                 Ranking:Ranking
             }
-
-            database.ref(racedata).child(this.currentTargetIndex).update(updatedata)
-            this.$modal.hide('detail')
+            const user = firebase.auth().currentUser
+            if(user!=null){
+                const uid = user.uid
+                database.ref(racedata).child('user/' + uid + '/' + this.currentTargetIndex).update(updatedata)
+                this.$modal.hide('detail')
+            }
         }
     },
     created() {
-        this.getMethod()
         const stats = 1
 
         for(let i = 0; i < 1200; i++){
             this.list.push(stats + i)
         }
+    },
+    mounted(){
+        firebase.auth().onAuthStateChanged((user) => {
+                if(user) {
+                    this.getMethod(user)
+                    console.log("login")
+                    this.authenticatedUser = true
+                } else {
+                    console.log("logout")
+                    this.authenticatedUser = false
+                }
+            }
+        )
     }
 })
 
@@ -410,7 +445,7 @@ Vue.component('login',{
             .then(
                 (userCredential) => {
                     console.log(userCredential)
-                    this.createNewUser()
+                    // this.createNewUser()
                     this.$router.replace('/')
                 },
                 (err) => {
@@ -445,16 +480,6 @@ Vue.component('login',{
                     console.log(errorMessage)
                 }
             )
-        },
-        createNewUser(){
-            const user = firebase.auth().currentUser
-            if(user!=null){
-                const uid = user.uid
-                const email = user.email
-                console.log(uid)
-                console.log(email)
-                database.ref(racedata).child('user/id').set(uid)
-            }
         }
     },
     mounted(){
