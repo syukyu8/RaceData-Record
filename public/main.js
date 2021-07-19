@@ -127,6 +127,7 @@ Vue.component('inputdata', {
                         Wise: this.wise,
                         Ranking: this.ranking
                     })
+                    alert("登録しました")
                 }else{
                     alert("ログインしてください")
                 }
@@ -256,6 +257,20 @@ Vue.component('viewdata',{
             </button>
             </div>
         </modal>
+        <modal name="delete-detail" :draggable="true" :resizable="true" :width="350" :height="250">
+            <div class="modal-hedder">
+                <h2>確認</h2>
+            </div>
+            <div class="modal-body-delete">
+                <p>本当に削除してもよろしいですか？</p>
+                <button class="delete" @click="offDelete()">
+                    いいえ
+                </button>
+                <button class="delete" @click="deleteMethod(currentTargetIndex)">
+                    はい
+                </button>
+            </div>
+        </modal>
         <table class="table">
             <thead>
                 <tr>
@@ -299,7 +314,7 @@ Vue.component('viewdata',{
                         </button>
                     </td>
                     <td>
-                        <button class="delete" @click="deleteMethod(index)">
+                        <button class="delete" @click="onDelete(index)">
                             データ削除
                         </button>
                     </td>
@@ -347,11 +362,19 @@ Vue.component('viewdata',{
                 const uid = user.uid
                 database.ref(racedata).child('user/' + uid + '/' + key).remove()
             }
+            this.$modal.hide('delete-detail')
         },
         onEdit(index) {
             this.$modal.show('detail')
             this.currentTargetIndex = index
             this.form = Object.assign({}, this.racerecord[index])
+        },
+        onDelete(index) {
+            this.$modal.show('delete-detail')
+            this.currentTargetIndex = index
+        },
+        offDelete() {
+            this.$modal.hide('delete-detail')
         },
         updateMethod(Name, Speed, Stamina, Power, Guts, Wise, Ranking){
             updatedata={
@@ -387,6 +410,7 @@ Vue.component('viewdata',{
                 } else {
                     console.log("logout")
                     this.authenticatedUser = false
+                    alert("ログインしてください")
                 }
             }
         )
@@ -396,7 +420,13 @@ Vue.component('viewdata',{
 Vue.component('login',{
     template: `
         <div class="container mt-5">
-            <button class="btn btn-primary mb-3" @click="logoutUser" v-if="authenticatedUser">ログアウト</button>
+            <div v-if="authenticatedUser">
+                <h2>ログアウト</h2>
+                <p>ログイン済みです</p>
+                <p>チームレースの結果を登録したり、チームレースの結果を閲覧できます</p>
+                <p>↓ログアウトはこちらから</p>
+                <button class="btn btn-primary mb-3" @click="logoutUser">ログアウト</button>
+            </div>
             <div class="row" v-else>
                 <div class="col-sm-6">
                     <h2>新規ユーザ登録</h2>

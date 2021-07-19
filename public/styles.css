@@ -52,9 +52,10 @@ body {
     margin: 10px;
     height: 60px;
     width: 100px;
-    background-color: white;
-    color: blue;
-    border: solid 1px blue;
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    border: solid 1px #17a2b8;
     border-radius: 2px;
     font-size: inherit;
   }
@@ -63,20 +64,36 @@ body {
     margin: 10px;
     height: 60px;
     width: 130px;
-    background-color: white;
-    color: blue;
-    border: solid 1px blue;
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    border: solid 1px #17a2b8;
     border-radius: 2px;
     font-size: inherit;
+  }
+  .modal-hedder{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+  }
+  .modal-body-delete{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
   }
 
   .delete{
     margin: 10px;
     height: 60px;
     width: 100px;
-    background-color: white;
-    color: blue;
-    border: solid 1px blue;
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    border: solid 1px #17a2b8;
     border-radius: 2px;
     font-size: inherit;
   }
@@ -152,7 +169,10 @@ body {
     width: 10%;  
     height: 25px;
     margin-bottom: 20px;
-    cursor: pointer
+    cursor: pointer;
+    color: #fff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
   }
   
   textarea {
@@ -279,7 +299,7 @@ body {
 
   .btn-primary {
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff;
+    background-color: #17a2b8;
+    border-color: #17a2b8;
     font-size: 14px;
   } 
