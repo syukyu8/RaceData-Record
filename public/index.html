@@ -73,15 +73,14 @@
     <div id="route">
       <div class="nav-bar">
           <!-- ナビゲーションに router-link コンポーネントを使う -->
-          <!-- リンク先を `to` プロパティに指定します -->
-          <!-- デフォルトで `<router-link>` は `<a>` タグとして描画されます -->
+          <!-- リンク先を `to` プロパティに指定する -->
+          <!-- デフォルトで `<router-link>` は `<a>` タグとして描画される -->
           <router-link to="/">チームレース履歴登録</router-link>
           <router-link to="/viewdata">チームレース履歴確認</router-link>
           <router-link to="/login">ログイン/ログアウト</router-link>
       </div>
-      <!-- <h1>確認したいデータを選んでください</h1> -->
       <!-- ルートアウトレット -->
-      <!-- ルートとマッチしたコンポーネントがここへ描画されます -->
+      <!-- ルートとマッチしたコンポーネントがここへ描画される -->
       <router-view></router-view>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
