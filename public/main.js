@@ -499,7 +499,7 @@ Vue.component('viewdata',{
                 } else { // ログインしていない場合
                     console.log("logout")
                     this.authenticatedUser = false
-                    alert("ログインしてください") // ログインしろとアラートを出す
+                    alert("ログインしなければデータは確認できません") // ログインしろとアラートを出す
                 }
             }
         )
@@ -602,6 +602,9 @@ Vue.component('login',{
         // ログアウトさせる
         logoutUser(){
             firebase.auth().signOut()
+            .then(function(){
+                alert("ログアウトしました")
+            })
           },
         // ログインボタンが押された場合に呼ばれる
         // メールアドレスとパスワードを用いてログイン処理を行う
